@@ -1,0 +1,36 @@
+# Source files (built files in dist/ will be included)
+src/
+
+# TypeScript config
+tsconfig.json
+
+# Git
+.git/
+.gitignore
+.github/
+
+# Development
+.env
+.env.*
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# Testing
+*.test.ts
+*.spec.ts
+coverage/
+
+# Documentation (some kept, detailed ones excluded)
+CONTRIBUTING.md
+PUBLISHING.md
+PROJECT_SUMMARY.md
+
+# Examples (kept for users)
+# examples/ directory is included
+
+# OS
+.DS_Store
+Thumbs.db
