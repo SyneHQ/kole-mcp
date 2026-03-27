@@ -1,0 +1,11 @@
+{
+  "synehq-kole": {
+    "command": "node",
+    "args": ["dist/index.js"],
+    "env": {
+      "SYNEHQ_API_KEY": "${SYNEHQ_API_KEY}",
+      "SYNEHQ_CONNECTION_ID": "${SYNEHQ_CONNECTION_ID}",
+      "SYNEHQ_BASE_URL": "https://cosmos.synehq.com"
+    }
+  }
+}
