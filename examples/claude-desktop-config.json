@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "synehq-kole": {
+      "command": "node",
+      "args": [
+        "/absolute/path/to/synehq-kole-mcp/dist/index.js"
+      ],
+      "env": {
+        "SYNEHQ_API_KEY": "your_api_key_here",
+        "SYNEHQ_CONNECTION_ID": "your_connection_id",
+        "SYNEHQ_BASE_URL": "https://cosmos.synehq.com"
+      }
+    }
+  }
+}
