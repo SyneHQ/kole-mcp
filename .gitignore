@@ -34,3 +34,8 @@ yarn-error.log*
 # Testing
 coverage/
 .nyc_output/
+
+# Internal documentation (not for public release)
+FINAL_SUMMARY.md
+PROJECT_SUMMARY.md
+PUBLISH_CHECKLIST.md
