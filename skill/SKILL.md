@@ -10,6 +10,50 @@ version: 1.1.0
 
 Execute SQL queries, PostgreSQL commands, and natural language questions against your databases through SyneHQ's intelligent data platform.
 
+## ⚠️ IMPORTANT: Prerequisites
+
+**This skill requires the SyneHQ Kole MCP server to be installed and configured.**
+
+### Install the MCP Server
+
+```bash
+# Install via npm
+npm install -g @synehq/kole-mcp
+
+# Or from source
+git clone https://github.com/synehq/kole-mcp.git
+cd kole-mcp
+npm install && npm run build
+```
+
+### Configure the MCP Server
+
+Create `.mcp.json` in your project:
+
+```json
+{
+  "synehq-kole": {
+    "command": "node",
+    "args": ["node_modules/@synehq/kole-mcp/dist/index.js"],
+    "env": {
+      "SYNEHQ_API_KEY": "${SYNEHQ_API_KEY}",
+      "SYNEHQ_CONNECTION_ID": "${SYNEHQ_CONNECTION_ID}"
+    }
+  }
+}
+```
+
+### Set Environment Variables
+
+```bash
+export SYNEHQ_API_KEY="your_api_key"
+export SYNEHQ_CONNECTION_ID="your_connection_id"
+```
+
+**Without the MCP server installed, this skill will not work!** The skill provides instructions and patterns, but the actual query execution happens through the MCP server's tools.
+
+---
+
 ## What is Kole?
 
 Kole is SyneHQ's data query platform that enables you to:

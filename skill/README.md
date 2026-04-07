@@ -2,7 +2,27 @@
 
 Official Claude Code skill for SyneHQ Kole - query your databases with SQL, PostgreSQL, and natural language.
 
-## Installation
+## ⚠️ Important: MCP Server Required
+
+**This skill only works if you have the SyneHQ Kole MCP server installed and running.**
+
+The skill provides query patterns and best practices, but actual database queries are executed through the MCP server's tools. You must install the MCP server first.
+
+### Install MCP Server First
+
+```bash
+# Install the MCP server
+npm install -g @synehq/kole-mcp
+
+# Configure environment
+export SYNEHQ_API_KEY="your_api_key"
+export SYNEHQ_CONNECTION_ID="your_connection_id"
+
+# Create .mcp.json in your project
+# See main README for configuration details
+```
+
+## Skill Installation (After MCP Server Setup)
 
 ### Option 1: Copy to Skills Directory (Recommended)
 
