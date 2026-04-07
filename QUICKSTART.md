@@ -69,8 +69,8 @@ npm install -g @synehq/kole-mcp
 ```json
 {
   "synehq-kole": {
-    "command": "node",
-    "args": ["synehq-kole-mcp/dist/index.js"],
+    "command": "npx",
+    "args": ["-y", "@synehq/kole-mcp@latest"],
     "env": {
       "SYNEHQ_API_KEY": "${SYNEHQ_API_KEY}",
       "SYNEHQ_CONNECTION_ID": "${SYNEHQ_CONNECTION_ID}"

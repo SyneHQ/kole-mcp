@@ -1,10 +1,8 @@
 {
   "mcpServers": {
     "synehq-kole": {
-      "command": "node",
-      "args": [
-        "/absolute/path/to/synehq-kole-mcp/dist/index.js"
-      ],
+      "command": "npx",
+      "args": ["-y", "@synehq/kole-mcp@latest"],
       "env": {
         "SYNEHQ_API_KEY": "your_api_key_here",
         "SYNEHQ_CONNECTION_ID": "your_connection_id",

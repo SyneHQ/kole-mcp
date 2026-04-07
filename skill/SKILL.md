@@ -33,8 +33,22 @@ Create `.mcp.json` in your project:
 ```json
 {
   "synehq-kole": {
-    "command": "node",
-    "args": ["node_modules/@synehq/kole-mcp/dist/index.js"],
+    "command": "npx",
+    "args": ["-y", "@synehq/kole-mcp@latest"],
+    "env": {
+      "SYNEHQ_API_KEY": "${SYNEHQ_API_KEY}",
+      "SYNEHQ_CONNECTION_ID": "${SYNEHQ_CONNECTION_ID}"
+    }
+  }
+}
+```
+
+Or if you have it installed globally:
+
+```json
+{
+  "synehq-kole": {
+    "command": "synehq-kole-mcp",
     "env": {
       "SYNEHQ_API_KEY": "${SYNEHQ_API_KEY}",
       "SYNEHQ_CONNECTION_ID": "${SYNEHQ_CONNECTION_ID}"

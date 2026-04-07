@@ -58,8 +58,24 @@ Add to `claude_desktop_config.json`:
 {
   "mcpServers": {
     "synehq-kole": {
-      "command": "node",
-      "args": ["/absolute/path/to/dist/index.js"],
+      "command": "npx",
+      "args": ["-y", "@synehq/kole-mcp@latest"],
+      "env": {
+        "SYNEHQ_API_KEY": "your_api_key",
+        "SYNEHQ_CONNECTION_ID": "your_connection_id"
+      }
+    }
+  }
+}
+```
+
+Or if installed globally:
+
+```json
+{
+  "mcpServers": {
+    "synehq-kole": {
+      "command": "synehq-kole-mcp",
       "env": {
         "SYNEHQ_API_KEY": "your_api_key",
         "SYNEHQ_CONNECTION_ID": "your_connection_id"
@@ -76,8 +92,22 @@ Create `.mcp.json`:
 ```json
 {
   "synehq-kole": {
-    "command": "node",
-    "args": ["node_modules/@synehq/kole-mcp/dist/index.js"],
+    "command": "npx",
+    "args": ["-y", "@synehq/kole-mcp@latest"],
+    "env": {
+      "SYNEHQ_API_KEY": "${SYNEHQ_API_KEY}",
+      "SYNEHQ_CONNECTION_ID": "${SYNEHQ_CONNECTION_ID}"
+    }
+  }
+}
+```
+
+Or if installed globally:
+
+```json
+{
+  "synehq-kole": {
+    "command": "synehq-kole-mcp",
     "env": {
       "SYNEHQ_API_KEY": "${SYNEHQ_API_KEY}",
       "SYNEHQ_CONNECTION_ID": "${SYNEHQ_CONNECTION_ID}"
