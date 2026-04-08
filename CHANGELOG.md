@@ -5,6 +5,14 @@ All notable changes to the SyneHQ Kole MCP server will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - 2026-04-08
+
+### Changed
+- Update all MCP configuration examples to use npm package
+- Use `npx -y @synehq/kole-mcp@latest` instead of local paths
+- Add global installation option using command name
+- Simplify setup process for end users
+
 ## [1.1.0] - 2026-04-08
 
 ### Added
