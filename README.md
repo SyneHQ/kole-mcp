@@ -1,5 +1,9 @@
 # SyneHQ Kole MCP Server
 
+[![npm version](https://badge.fury.io/js/@synehq%2Fkole-mcp.svg)](https://www.npmjs.com/package/@synehq/kole-mcp)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js Version](https://img.shields.io/node/v/@synehq/kole-mcp)](https://nodejs.org)
+
 Query your databases using SQL, PostgreSQL, or plain English through SyneHQ's Kole platform. Built on the Model Context Protocol.
 
 ## Why?
