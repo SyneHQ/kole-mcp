@@ -21,6 +21,20 @@ We built this because switching between database clients, writing boilerplate SQ
 
 ## Getting started
 
+### Security & Prerequisites
+
+**⚠️ Important Security Information**
+
+This MCP server can execute arbitrary SQL queries and DDL statements (CREATE, ALTER, DROP) against your connected databases. Before installing:
+
+1. **Review the source code**: Check [github.com/synehq/kole-mcp](https://github.com/synehq/kole-mcp) to understand what the API key grants access to
+2. **Use least-privilege credentials**: For testing, use read-only database users when possible
+3. **Test on non-production databases first**: Verify behavior before connecting to production data
+4. **Never commit credentials**: Keep SYNEHQ_API_KEY out of version control
+5. **Understand audit logging**: All queries are logged server-side at [data.synehq.com/dashboard](https://data.synehq.com/dashboard) → Audit Logs
+
+The SYNEHQ_API_KEY grants access to query all databases connected to your SyneHQ account.
+
 ### Install
 
 ```bash
@@ -332,13 +346,47 @@ test_connection({ connectionId: "your_connection" })
 
 Check the dashboard to make sure the connection is configured correctly and the database is accessible.
 
-## Security notes
+## Security
 
-- API keys go in headers, never in query strings
-- All traffic over HTTPS
-- Connection credentials stay server-side
-- User IDs get logged for audit trails
-- Don't commit API keys to git
+### Required Credentials
+
+This MCP server requires two environment variables:
+
+- **SYNEHQ_API_KEY** (required): Authentication key that grants access to query all databases connected to your SyneHQ account
+- **SYNEHQ_CONNECTION_ID** (optional): Default database connection ID (can be overridden per-query)
+
+Get your credentials:
+1. Sign up at https://data.synehq.com/signup
+2. Get API key from dashboard: Settings → API Keys
+3. Get connection ID from dashboard: Connections
+
+### Security Best Practices
+
+**What this MCP server can do:**
+- Execute arbitrary SQL SELECT, INSERT, UPDATE, DELETE statements
+- Execute PostgreSQL DDL statements (CREATE TABLE, ALTER TABLE, DROP TABLE, etc.)
+- Access all databases connected to your SyneHQ account
+- Read database schemas and metadata
+
+**Recommendations:**
+- ✅ Use read-only database users for exploration and testing
+- ✅ Test on non-production databases first
+- ✅ Review the [source code](https://github.com/synehq/kole-mcp) before installation
+- ✅ Use database users with only necessary permissions for production
+- ✅ Monitor audit logs at https://data.synehq.com/dashboard → Audit Logs
+- ❌ Don't commit SYNEHQ_API_KEY to version control
+- ❌ Don't use superuser database credentials
+- ❌ Don't share API keys publicly
+
+**Transport security:**
+- All API communication over HTTPS
+- API keys transmitted via headers (never in URLs or query strings)
+- Database credentials managed server-side (never exposed to MCP client)
+
+**Audit logging:**
+- All queries logged with timestamps and user IDs (if provided)
+- Access logs at https://data.synehq.com/dashboard → Audit Logs
+- Track who executed what queries on which databases
 
 ## Contributing
 

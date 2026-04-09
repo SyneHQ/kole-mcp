@@ -4,6 +4,38 @@ description: Execute queries against your databases using SQL, PostgreSQL comman
 tools: No special tools required - uses MCP server
 compatibility: Requires synehq-kole MCP server to be configured
 version: 1.1.1
+requires_mcp:
+  package: "@synehq/kole-mcp"
+  source: "https://github.com/synehq/kole-mcp"
+  npm: "https://www.npmjs.com/package/@synehq/kole-mcp"
+  install: "npm install -g @synehq/kole-mcp"
+  min_version: "1.0.0"
+requires_env:
+  - name: SYNEHQ_API_KEY
+    required: true
+    description: "SyneHQ API authentication key. Get from https://data.synehq.com/dashboard → Settings → API Keys"
+    security: "Grants access to query connected databases. Treat as sensitive credential. Do not commit to version control."
+  - name: SYNEHQ_CONNECTION_ID
+    required: false
+    description: "Default database connection ID. Can be overridden per-query. Get from https://data.synehq.com/dashboard → Connections"
+    security: "Optional. If not set, must provide connectionId with each query."
+install_steps:
+  - "Install MCP server: npm install -g @synehq/kole-mcp"
+  - "Get SyneHQ account: curl https://data.synehq.com/api/auth-info"
+  - "Sign up at: https://data.synehq.com/signup"
+  - "Get API key from: https://data.synehq.com/dashboard → Settings → API Keys"
+  - "Configure connection at: https://data.synehq.com/dashboard → Connections"
+  - "Set environment variables: SYNEHQ_API_KEY and SYNEHQ_CONNECTION_ID (optional)"
+  - "Add MCP server to .mcp.json or claude_desktop_config.json (see documentation below)"
+security_warnings:
+  - "This MCP server can execute arbitrary SQL queries and DDL statements (CREATE, ALTER, DROP) against connected databases."
+  - "Use least-privilege, read-only database credentials when possible for testing and exploration."
+  - "For production use, ensure database user has only necessary permissions."
+  - "All queries are logged for audit purposes with optional userId tracking."
+  - "Test on non-production databases first to understand query capabilities and impacts."
+  - "API key grants access to all databases connected to your SyneHQ account."
+  - "Review MCP package source code at https://github.com/synehq/kole-mcp before installation."
+audit_logging: "All queries logged server-side with timestamps, user IDs (if provided), and connection details. Access logs at https://data.synehq.com/dashboard → Audit Logs"
 ---
 
 # kole - Query Your Data with SyneHQ
