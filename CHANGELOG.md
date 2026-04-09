@@ -5,6 +5,22 @@ All notable changes to the SyneHQ Kole MCP server will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.2] - 2026-04-09
+
+### Changed
+- Add comprehensive security metadata to skill frontmatter for clawhub registry compliance
+- Declare required environment variables (SYNEHQ_API_KEY, SYNEHQ_CONNECTION_ID) in structured metadata
+- Add MCP server dependency information with package links
+- Include installation steps and security warnings in skill metadata
+- Expand README security section with best practices and capability descriptions
+- Improve transparency about SQL execution capabilities and credential requirements
+
+### Documentation
+- Enhanced skill/SKILL.md with `requires_mcp`, `requires_env`, `install_steps`, `security_warnings`, and `audit_logging` metadata
+- Added "Security & Prerequisites" section to README
+- Expanded security documentation with detailed capabilities and recommendations
+- Clarified least-privilege database credential usage
+
 ## [1.1.1] - 2026-04-08
 
 ### Changed

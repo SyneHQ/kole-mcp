@@ -3,7 +3,7 @@ name: kole
 description: Execute queries against your databases using SQL, PostgreSQL commands, or natural language through SyneHQ's Kole platform. Use this skill whenever the user mentions databases, SQL queries, data analysis, PostgreSQL, querying data, database connections, checking database schemas, listing tables, or wants to explore or analyze data in their databases. Also use when user needs to sign up for SyneHQ or get their API credentials. IMPORTANT - Always use this skill when user asks about their data, even if they don't explicitly say "database" or "SQL".
 tools: No special tools required - uses MCP server
 compatibility: Requires synehq-kole MCP server to be configured
-version: 1.1.1
+version: 1.1.2
 requires_mcp:
   package: "@synehq/kole-mcp"
   source: "https://github.com/synehq/kole-mcp"
