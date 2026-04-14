@@ -115,8 +115,8 @@ class SyneHQClient {
 
     const requestData = removeUndefined({
       query: params.query,
-      connectionId,
-      userId: params.userId,
+      connection_id: connectionId,
+      user_id: params.userId,
       psql: params.psql,
       limit: params.limit,
       timeout: params.timeout,
@@ -159,7 +159,7 @@ class SyneHQClient {
           "Content-Type": "application/json",
           "X-API-KEY": this.apiKey,
         },
-        body: JSON.stringify({ connectionId }),
+        body: JSON.stringify({ connection_id: connectionId }),
       }
     );
 
@@ -182,7 +182,7 @@ class SyneHQClient {
     }
 
     const requestData = removeUndefined({
-      connectionId,
+      connection_id: connectionId,
       database: params.database,
       schema: params.schema,
     });
@@ -222,7 +222,7 @@ class SyneHQClient {
           "Content-Type": "application/json",
           "X-API-KEY": this.apiKey,
         },
-        body: JSON.stringify({ connectionId }),
+        body: JSON.stringify({ connection_id: connectionId }),
       }
     );
 
