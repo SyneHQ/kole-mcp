@@ -41,6 +41,10 @@ const ExecuteQuerySchema = z.object({
     .string()
     .optional()
     .describe("Connection ID (uses SYNEHQ_CONNECTION_ID env var if not provided)"),
+  database: z
+    .string()
+    .optional()
+    .describe("Database name to execute the query against"),
   userId: z.string().optional().describe("User ID for query tracking"),
   psql: z
     .boolean()
@@ -119,6 +123,9 @@ class SyneHQClient {
       psql: params.psql,
       limit: params.limit,
       timeout: params.timeout,
+      connection: {
+        database: params.database
+      }
     });
 
     const response = await fetch(`${this.baseURL}/api/v1/magic.query`, {
@@ -295,6 +302,11 @@ const TOOLS: Tool[] = [
           type: "string",
           description:
             "Connection ID for the database. If not provided, uses SYNEHQ_CONNECTION_ID environment variable.",
+        },
+        database: {
+          type: "string",
+          description:
+            "Database name to execute the query against.",
         },
         userId: {
           type: "string",

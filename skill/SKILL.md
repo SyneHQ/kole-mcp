@@ -156,6 +156,7 @@ execute_query({
 execute_query({
   query: "SELECT * FROM large_table",
   connectionId: "prod-db",
+  database: "billing", // specify specific database (optional)
   limit: 100,
   timeout: 60000,  // 60 seconds
   userId: "analyst_1"  // for audit tracking
@@ -484,6 +485,26 @@ execute_query({
 execute_query({
   query: "SELECT * FROM daily_metrics WHERE date >= CURRENT_DATE - 30",
   connectionId: "analytics-db"
+})
+```
+
+### Multi-Database Scenarios
+
+Query different databases under the same connection:
+
+```javascript
+// Query marketing database
+execute_query({
+  query: "SELECT COUNT(*) FROM campaigns",
+  connectionId: "prod-db",
+  database: "marketing"
+})
+
+// Query billing database
+execute_query({
+  query: "SELECT COUNT(*) FROM invoices",
+  connectionId: "prod-db",
+  database: "billing"
 })
 ```
 

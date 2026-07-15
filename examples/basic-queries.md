@@ -325,6 +325,28 @@ execute_query({
 })
 ```
 
+## Example 11: Querying Specific Databases
+
+If a single connection ID (e.g. your Postgres connection) has multiple databases associated with it, you can target a specific database using the `database` parameter:
+
+### Query the marketing database under your production connection
+```javascript
+execute_query({
+  query: "SELECT COUNT(*) FROM campaigns",
+  connectionId: "prod-db-connection",
+  database: "marketing"
+})
+```
+
+### Query the billing database under your production connection
+```javascript
+execute_query({
+  query: "SELECT COUNT(*) FROM invoices",
+  connectionId: "prod-db-connection",
+  database: "billing"
+})
+```
+
 ## Tips
 
 1. **Always use LIMIT** when exploring data to avoid large result sets
