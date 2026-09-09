@@ -49,7 +49,7 @@ const ExecuteQuerySchema = z.object({
   psql: z
     .boolean()
     .optional()
-    .describe("Enable PostgreSQL mode (allows all psql commands and queries)"),
+    .describe("Deprecated: CLI metacommands are disabled; SQL uses the server-enforced key capability"),
   limit: z
     .number()
     .optional()
@@ -110,6 +110,7 @@ class SyneHQClient {
   }
 
   async executeQuery(params: z.infer<typeof ExecuteQuerySchema>) {
+    if (params.psql) throw new Error("psql metacommands are disabled; use SQL with an appropriately scoped API key");
     const connectionId = params.connectionId || SYNEHQ_CONNECTION_ID;
     if (!connectionId) {
       throw new Error(
@@ -120,7 +121,7 @@ class SyneHQClient {
     const requestData = removeUndefined({
       query: params.query,
       id: connectionId,
-      psql: params.psql,
+      transaction: true,
       limit: params.limit,
       timeout: params.timeout,
       connection: {
@@ -130,10 +131,11 @@ class SyneHQClient {
 
     const response = await fetch(`${this.baseURL}/api/v1/magic.query`, {
       method: "POST",
+      redirect: "error",
+      signal: AbortSignal.timeout(30_000),
       headers: removeUndefined({
         "Content-Type": "application/json",
         "X-API-KEY": this.apiKey,
-        "X-User-Id": params.userId,
         Connection: "keep-alive",
       }),
       body: JSON.stringify(requestData),
@@ -161,6 +163,8 @@ class SyneHQClient {
       `${this.baseURL}/api/v1/metadata/test-connection`,
       {
         method: "POST",
+      redirect: "error",
+      signal: AbortSignal.timeout(30_000),
         headers: {
           "Content-Type": "application/json",
           "X-API-KEY": this.apiKey,
@@ -195,6 +199,8 @@ class SyneHQClient {
 
     const response = await fetch(`${this.baseURL}/api/v1/metadata/tables`, {
       method: "POST",
+      redirect: "error",
+      signal: AbortSignal.timeout(30_000),
       headers: {
         "Content-Type": "application/json",
         "X-API-KEY": this.apiKey,
@@ -224,6 +230,8 @@ class SyneHQClient {
       `${this.baseURL}/api/v1/metadata/table/${params.database}/${params.schema}/${params.table}`,
       {
         method: "POST",
+      redirect: "error",
+      signal: AbortSignal.timeout(30_000),
         headers: {
           "Content-Type": "application/json",
           "X-API-KEY": this.apiKey,
@@ -245,6 +253,8 @@ class SyneHQClient {
   async getConnections() {
     const response = await fetch(`${this.dataURL}/api/connections`, {
       method: "GET",
+      redirect: "error",
+      signal: AbortSignal.timeout(30_000),
       headers: {
         "X-API-KEY": this.apiKey,
       },
@@ -285,7 +295,7 @@ const TOOLS: Tool[] = [
     name: "execute_query",
     description:
       "Execute a SQL query or natural language query against your data through SyneHQ Kole. " +
-      "Supports standard SQL queries and PostgreSQL-specific commands when psql mode is enabled. " +
+      "Supports SQL queries subject to the API key permission and connector policy. " +
       "Perfect for data analysis, reporting, and database operations.",
     inputSchema: {
       type: "object",
@@ -315,7 +325,7 @@ const TOOLS: Tool[] = [
         psql: {
           type: "boolean",
           description:
-            "Enable PostgreSQL mode to allow all psql commands and queries (e.g., \\dt, \\d+ table_name, CREATE, DROP, ALTER)",
+            "Deprecated: CLI metacommands are disabled; use ordinary SQL",
         },
         limit: {
           type: "number",
