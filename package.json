@@ -1,6 +1,6 @@
 {
   "name": "@synehq/kole-mcp",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "Model Context Protocol server for SyneHQ Kole - Execute queries against your data with natural language",
   "type": "module",
   "main": "dist/index.js",
