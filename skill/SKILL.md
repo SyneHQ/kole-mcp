@@ -460,7 +460,6 @@ execute_query({
 | `SYNEHQ_API_KEY` | ✅ Yes | - | Authentication |
 | `SYNEHQ_CONNECTION_ID` | ⚠️ Recommended | - | Default database connection |
 | `SYNEHQ_BASE_URL` | ❌ No | https://cosmos.synehq.com | API endpoint |
-| `SYNEHQ_DATA_URL` | ❌ No | https://data.synehq.com | Data API endpoint |
 
 ## Advanced Features
 
