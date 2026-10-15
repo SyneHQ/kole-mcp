@@ -11,7 +11,6 @@
  * - SYNEHQ_API_KEY: Your SyneHQ API key (required)
  * - SYNEHQ_CONNECTION_ID: Default connection ID (optional, can be per-query)
  * - SYNEHQ_BASE_URL: API base URL (default: https://cosmos.synehq.com)
- * - SYNEHQ_DATA_URL: Data API base URL (default: https://data.synehq.com)
  */
 
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
@@ -27,7 +26,6 @@ import { z } from "zod";
 const SYNEHQ_API_KEY = process.env.SYNEHQ_API_KEY;
 const SYNEHQ_CONNECTION_ID = process.env.SYNEHQ_CONNECTION_ID;
 const SYNEHQ_BASE_URL = process.env.SYNEHQ_BASE_URL || "https://cosmos.synehq.com";
-const SYNEHQ_DATA_URL = process.env.SYNEHQ_DATA_URL || "https://data.synehq.com";
 
 if (!SYNEHQ_API_KEY) {
   console.error("Error: SYNEHQ_API_KEY environment variable is required");
@@ -100,12 +98,10 @@ function removeUndefined<T extends Record<string, any>>(obj: T): Partial<T> {
 // API client
 class SyneHQClient {
   private baseURL: string;
-  private dataURL: string;
   private apiKey: string;
 
-  constructor(baseURL: string, dataURL: string, apiKey: string) {
+  constructor(baseURL: string, apiKey: string) {
     this.baseURL = baseURL;
-    this.dataURL = dataURL;
     this.apiKey = apiKey;
   }
 
@@ -251,7 +247,7 @@ class SyneHQClient {
   }
 
   async getConnections() {
-    const response = await fetch(`${this.dataURL}/api/connections`, {
+    const response = await fetch(`${this.baseURL}/api/v1/connections`, {
       method: "GET",
       redirect: "error",
       signal: AbortSignal.timeout(30_000),
@@ -445,7 +441,7 @@ const server = new Server(
   }
 );
 
-const client = new SyneHQClient(SYNEHQ_BASE_URL, SYNEHQ_DATA_URL, SYNEHQ_API_KEY);
+const client = new SyneHQClient(SYNEHQ_BASE_URL, SYNEHQ_API_KEY);
 
 // Handle tool listing
 server.setRequestHandler(ListToolsRequestSchema, async () => {
