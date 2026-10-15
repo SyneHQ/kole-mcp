@@ -27,12 +27,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/synehq/kole-mcp.git"
+    "url": "git+https://github.com/SyneHQ/kole-mcp.git"
   },
   "bugs": {
-    "url": "https://github.com/synehq/kole-mcp/issues"
+    "url": "https://github.com/SyneHQ/kole-mcp/issues"
   },
-  "homepage": "https://github.com/synehq/kole-mcp#readme",
+  "homepage": "https://github.com/SyneHQ/kole-mcp#readme",
   "keywords": [
     "mcp",
     "mcp-server",
