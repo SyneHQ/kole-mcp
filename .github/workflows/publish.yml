@@ -1,80 +1,69 @@
 name: Publish to NPM
 
+# Every push to sudo bumps the patch version, publishes via npm trusted
+# publishing (OIDC, no token) and tags + releases the bumped commit.
 on:
   push:
-    tags:
-      - 'v*.*.*'
+    branches: [sudo]
   workflow_dispatch:
 
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
 permissions:
-  contents: read
+  contents: write
   id-token: write
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build
-        run: npm run build
-
-      - name: Check build artifacts
-        run: |
-          test -f dist/index.js || exit 1
-          test -f dist/index.d.ts || exit 1
-
   publish:
-    needs: test
+    # Release commits are pushed with GITHUB_TOKEN, which never re-triggers
+    # workflows; this guard only covers pushes made with a personal token.
+    if: "!startsWith(github.event.head_commit.message, 'chore(release):')"
     runs-on: ubuntu-latest
+    environment: prod # must match the npm trusted publisher config
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
         with:
-          node-version: '20'
+          fetch-depth: 0 # tags, for the version bump
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24' # trusted publishing needs npm >= 11.5.1
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci
+      - run: npm install -g npm@latest
 
-      - name: Build
-        run: npm run build
+      - run: npm ci
 
-      - name: Publish to NPM
-        run: npm publish --provenance --access public
+      - run: npm run build
+
+      - name: Check build artifacts
+        run: test -f dist/index.js && test -f dist/index.d.ts
+
+      - name: Bump patch version
+        id: version
+        run: |
+          # Start from the highest of package.json, the registry and git tags.
+          tagged=$(git tag -l 'v*.*.*' --sort=-v:refname | head -1 | sed 's/^v//')
+          published=$(npm view "$(node -p 'require("./package.json").name')" version 2>/dev/null || echo 0.0.0)
+          local=$(node -p 'require("./package.json").version')
+          base=$(printf '%s\n' "$published" "$local" "${tagged:-0.0.0}" | sort -V | tail -1)
+          npm version "$base" --no-git-tag-version --allow-same-version
+          npm version patch --no-git-tag-version
+          echo "tag=v$(node -p 'require("./package.json").version')" >> "$GITHUB_OUTPUT"
+
+      - run: npm publish --provenance --access public
+
+      - name: Commit, tag and release
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Create GitHub Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref_name }}
-          release_name: Release ${{ github.ref_name }}
-          body: |
-            ## Changes in ${{ github.ref_name }}
-
-            See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for details.
-
-            ## Installation
-
-            ```bash
-            npm install -g @synehq/kole-mcp@${{ github.ref_name }}
-            ```
-          draft: false
-          prerelease: false
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git commit -am "chore(release): $TAG"
+          git tag "$TAG"
+          git push origin HEAD:sudo "$TAG"
+          gh release create "$TAG" --generate-notes
