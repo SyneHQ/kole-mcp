@@ -50,8 +50,8 @@ jobs:
           published=$(npm view "$(node -p 'require("./package.json").name')" version 2>/dev/null || echo 0.0.0)
           local=$(node -p 'require("./package.json").version')
           base=$(printf '%s\n' "$published" "$local" "${tagged:-0.0.0}" | sort -V | tail -1)
-          npm version "$base" --no-git-tag-version --allow-same-version
-          npm version patch --no-git-tag-version
+          npm version "$base" --no-git-tag-version --allow-same-version --ignore-scripts
+          npm version patch --no-git-tag-version --ignore-scripts
           echo "tag=v$(node -p 'require("./package.json").version')" >> "$GITHUB_OUTPUT"
 
       - run: npm publish --provenance --access public
