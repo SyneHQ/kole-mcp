@@ -114,12 +114,11 @@ class SyneHQClient {
       );
     }
 
+    // db.api's magic.query rejects transaction on reads, limit (a metadata
+    // selector there) and timeout (unknown field), so those stay client-side.
     const requestData = removeUndefined({
       query: params.query,
       id: connectionId,
-      transaction: true,
-      limit: params.limit,
-      timeout: params.timeout,
       connection: {
         database: params.database
       }
@@ -128,7 +127,7 @@ class SyneHQClient {
     const response = await fetch(`${this.baseURL}/api/v1/magic.query`, {
       method: "POST",
       redirect: "error",
-      signal: AbortSignal.timeout(30_000),
+      signal: AbortSignal.timeout(params.timeout ?? 30_000),
       headers: removeUndefined({
         "Content-Type": "application/json",
         "X-API-KEY": this.apiKey,
@@ -144,7 +143,11 @@ class SyneHQClient {
       );
     }
 
-    return await response.json();
+    const result: any = await response.json();
+    if (params.limit && Array.isArray(result?.results)) {
+      result.results = result.results.slice(0, params.limit);
+    }
+    return result;
   }
 
   async testConnection(params: z.infer<typeof TestConnectionSchema>) {
